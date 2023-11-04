@@ -1,0 +1,4 @@
+#+title: Dot Emacs Repo
+#+author: Cameron Shortt
+
+Tangle ~/etc/config.org to ~/.emacs
