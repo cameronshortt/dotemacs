@@ -17,7 +17,6 @@
   - [[#line-number-and-truncation][Line Number and truncation]]
 - [[#which-key][Which Key]]
 - [[#org-tweaks][Org Tweaks]]
-  - [[#require-org][Require Org]]
   - [[#table-of-contents][Table of Contents]]
   - [[#pretty-bullets][Pretty Bullets]]
   - [[#fast-typing][Fast Typing]]
@@ -60,12 +59,6 @@ And I can have a .emacs :D
         magit))
 
 (eval-when-compile (require 'use-package))
-#+end_src
-
-This should make startup work better.
-
-#+begin_src
-(package-install-selected-packages)
 #+end_src
 
 * Keybindings
@@ -114,12 +107,13 @@ I like having a leader key, buffer stuff, etc.
         "wk" '(evil-window-delete :wk "Kill Window")
 
         "SPC" '(counsel-M-x :wk "Better M-x")
-        "." '(find-file :wk "Find File")
-        "fc" '((lambda () (interactive) (find-file "~/etc/config.org")) :wk "Edit Config")
+        "." '(:ignore t :wk "Find...")
+        ".." '(find-file :wk "Find File")
+        ".c" '((lambda () (interactive) (find-file "~/etc/config.org")) :wk "Edit Config")
 
         "RET" '(comment-line :wk "Comment Block")
 
-        "e" '(:ignore t :wk "Evaluate")
+        "e" '(:ignore t :wk "Evaluate...")
         "eb" '(eval-buffer :wk "Evaluate Elisp in Buffer")
         "ef" '(eval-defun :wk "Evaluate Function at Point")
         "ee" '(eval-expression :wk "Evaluate Elisp at Point")
@@ -198,13 +192,6 @@ Also coding in a mainframe font sounds cool.
     :weight 'medium)
 #+end_src
 
-Make keywords and comments Italic
-
-#+begin_src elisp
-(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
-#+end_src
-
 * GUI Tweaks
 
 There is absolutely no room for weird buttons in *my* editor.
@@ -247,14 +234,6 @@ There is absolutely no room for weird buttons in *my* editor.
 #+end_src
 
 * Org Tweaks
-
-** Require Org
-
-#+begin_src elisp
-(require 'org)
-
-(setq org-return-follows-link t)
-#+end_src
 
 ** Table of Contents
 
@@ -304,8 +283,7 @@ There is absolutely no room for weird buttons in *my* editor.
 Set default shells for various systems.
 
 #+begin_src elisp
-(setq shell-file-name "/opt/homebrew/bin/oksh -l")
-;; (setq shell-file-name "/bin/ksh -l")
+(setq shell-file-name "/bin/ksh -l")
 #+end_src
 
 * Ivy
