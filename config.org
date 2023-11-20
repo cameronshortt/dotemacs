@@ -15,21 +15,26 @@
 - [[#gui-tweaks][GUI Tweaks]]
   - [[#remove-menu-bar-scrollbar-etc][Remove menu bar, scrollbar, etc]]
   - [[#line-number-and-truncation][Line Number and truncation]]
+  - [[#remove-startup-junk][Remove Startup Junk]]
 - [[#which-key][Which Key]]
 - [[#org-tweaks][Org Tweaks]]
   - [[#table-of-contents][Table of Contents]]
   - [[#pretty-bullets][Pretty Bullets]]
   - [[#fast-typing][Fast Typing]]
   - [[#remove-weird-indention][Remove weird indention]]
+  - [[#auto-brackets][Auto Brackets]]
 - [[#theme][Theme]]
   - [[#general-themeing][General Themeing]]
   - [[#gaudy-syntax-highlighting][Gaudy Syntax Highlighting]]
 - [[#terminal][Terminal]]
+  - [[#source-path][Source Path]]
+  - [[#set-shell-so-term-works][Set Shell so Term works]]
 - [[#ivy][Ivy]]
   - [[#counsel][Counsel]]
   - [[#ivy-1][Ivy]]
   - [[#ivy-rich][Ivy Rich]]
 - [[#artist-mode-d][Artist Mode :D]]
+- [[#backups][Backups]]
 
 * Package Management
 
@@ -56,7 +61,8 @@ And I can have a .emacs :D
         ivy
         ivy-rich
         counsel
-        magit))
+        magit
+        exec-path-from-shell))
 
 (eval-when-compile (require 'use-package))
 #+end_src
@@ -111,7 +117,7 @@ I like having a leader key, buffer stuff, etc.
         ".." '(find-file :wk "Find File")
         ".c" '((lambda () (interactive) (find-file "~/etc/config.org")) :wk "Edit Config")
 
-        "RET" '(comment-line :wk "Comment Block")
+        "TAB" '(comment-line :wk "Comment Block")
 
         "e" '(:ignore t :wk "Evaluate...")
         "eb" '(eval-buffer :wk "Evaluate Elisp in Buffer")
@@ -162,14 +168,14 @@ Mostly for text resizing.
 #+end_src
 
 #+begin_src elisp
-(setq ouch-map '(((rx ".mkv" eol) "mpv")
-                 ((rx ".mp4" eol) "mpv")
-                 ((rx ".mp3" eol) "mpv")
-                 ((rx ".v" eol) "mpv")
-                 ((rx ".m3u" eol) "mpv")
-                 ((rx ".3" eol) "mpv")
-                 ((rx ".opus" eol) "mpv")
-                 ((rx ".ogg" eol) "mpv")))
+(setq ouch-map '(((rx ".mkv" eol) "iina")
+                 ((rx ".mp4" eol) "iina")
+                 ((rx ".mp3" eol) "iina")
+                 ((rx ".v" eol) "iina")
+                 ((rx ".m3u" eol) "iina")
+                 ((rx ".3" eol) "iina")
+                 ((rx ".opus" eol) "iina")
+                 ((rx ".ogg" eol) "iina")))
 #+end_src
 
 * Fonts
@@ -210,6 +216,13 @@ There is absolutely no room for weird buttons in *my* editor.
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
 (setq truncate-lines t)
+#+end_src
+
+** Remove Startup Junk
+
+#+begin_src elisp
+(setq inhibit-startup-echo-area-message t)
+(setq inhibit-startup-message t)
 #+end_src
 
 * Which Key
@@ -263,6 +276,12 @@ There is absolutely no room for weird buttons in *my* editor.
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
+** Auto Brackets
+
+#+begin_src elisp
+(electric-pair-mode 1)
+#+end_src
+
 * Theme
 
 ** General Themeing
@@ -280,10 +299,19 @@ There is absolutely no room for weird buttons in *my* editor.
 
 * Terminal
 
+** Source Path
+
+#+begin_src elisp
+(require 'exec-path-from-shell)
+(exec-path-from-shell-initialize)
+#+end_src
+
+** Set Shell so Term works
+
 Set default shells for various systems.
 
 #+begin_src elisp
-(setq shell-file-name "/bin/ksh -l")
+(setq shell-file-name "/opt/homebrew/bin/oksh -l")
 #+end_src
 
 * Ivy
@@ -334,4 +362,13 @@ This makes my M-x look fantastic :D
 
 #+begin_src elisp
 (require 'artist)
+#+end_src
+
+* Backups
+
+No one actually needs backups.
+
+#+begin_src elisp
+(setq make-backup-files nil)
+(setq auto-save-default nil)
 #+end_src
