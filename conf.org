@@ -1,0 +1,116 @@
+#+title: EMACS Config
+#+author: Cameron Shortt
+#+property: header-args :tangle "~/.emacs"
+
+* Notes
+
+Refresh buffer with =C-c C-c= on property line.
+
+* Contents :toc:
+- [[#notes][Notes]]
+- [[#package-management][Package Management]]
+- [[#global-config][Global Config]]
+  - [[#functions][Functions]]
+  - [[#actual-config][Actual Config]]
+- [[#packages][Packages]]
+
+* Package Management
+
+=package.el= works perfectly for me, despite its flaws.
+Also I can consolidate all of my config into a single =.emacs=
+
+#+begin_src elisp
+(require 'package)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
+(setq use-package-always-ensure t
+      use-package-always-defer t)
+#+end_src
+
+* Global Config
+
+Apparently I can =(use-package emacs)= lol
+
+** Functions
+
+#+begin_src elisp
+(defun reload ()
+  (interactive)
+  (load-file "~/.emacs"))
+
+(defun open-conf ()
+  (interactive)
+  (find-file "~/.emacs"))
+
+(defun path-append (dir)
+  (setenv "PATH" (concat (getenv "PATH") ":" dir))
+  (setq exec-path (append exec-path 'dir)))
+
+#+end_src
+
+** Actual Config
+
+#+begin_src elisp
+(use-package emacs
+  :bind (("C-=" . text-scale-increase)
+         ("C--" . text-scale-decrease)
+         ("C-x r" . reload)
+         ("C-x c" . open-conf))
+  :hook (emacs-startup . (lambda () (message "(%s %d)"
+                                      (format "%.2f"
+                                              (float-time
+                                              (time-subtract after-init-time before-init-time)))
+                                      gcs-done)))
+  :config (setq truncate-lines t
+                inhibit-startup-echo-area-message t
+                inhibit-startup-message t)
+
+          (when (eq system-type 'darwin)
+            (path-append "/opt/homebrew/bin"))
+
+          (menu-bar-mode -1)
+          (tool-bar-mode -1)
+          (scroll-bar-mode -1)
+
+          (global-display-line-numbers-mode 1)
+          (global-visual-line-mode 1)
+          (column-number-mode)
+
+
+          (load-theme 'modus-vivendi))
+#+end_src
+
+* Packages
+
+#+begin_src elisp
+(use-package org
+  :hook ((org-mode . org-indent-mode))
+  :config (setq org-edit-src-content-indentation 0))
+(use-package toc-org
+  :commands toc-org-enable
+  :hook (org-mode . toc-org-enable))
+(autoload 'org-tempo "org-tempo" t nil)
+(use-package org-drill)
+
+(use-package paredit
+  :hook ((emacs-lisp-mode . enable-paredit-mode)
+         (lisp-mode . enable-paredit-mode)
+         (ielm-mode . enable-paredit-mode)
+         (lisp-interaction-mode . enable-paredit-mode)
+         (eval-expression-minibuffer-setup . enable-paredit-mode)
+         (org-mode . enable-paredit-mode)))
+
+(use-package magit
+  :bind ("C-x r" . magit-status))
+(use-package esup :config (setq esup-depth 0))
+
+(use-package god-mode
+  :bind ("<escape>" . god-mode-all)
+  :config (setq god-exempt-major-modes nil
+		  god-exempt-predicates nil ))
+#+end_src
