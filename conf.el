@@ -45,9 +45,12 @@
                 inhibit-startup-message t
 		dired-use-ls-dired nil)
 
-          (when (eq system-type 'darwin)
-            (path-cons "/opt/homebrew/bin")
-            (path-cons "/opt/homebrew/opt/openjdk/bin"))
+	  (when (eq system-type 'darwin)
+	    (setenv "JAVA_HOME" "/opt/homebrew/opt/openjdk")
+
+	    (path-cons "/opt/homebrew/bin")
+	    (path-cons (concat (getenv "JAVA_HOME") "/bin"))
+	    (path-cons "/opt/local/bin"))
           (path-cons (concat (getenv "HOME") "/bin"))
 	  
           (menu-bar-mode -1)
@@ -87,6 +90,9 @@
   :bind ("<escape>" . god-mode-all)
   :config (setq god-exempt-major-modes nil
 	        god-exempt-predicates nil ))
+
+(use-package eat
+  :hook ((eshell-load . eat-eshell-mode)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
