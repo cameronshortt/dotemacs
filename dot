@@ -4,7 +4,7 @@
 doas pkg_add wget git sbcl emacs
 
 # download the things
-git clone https://github.com/cameronshortt/dotfiles ~/etc
+git clone https://github.com/cameronshortt/dotemacs ~/etc
 cd ~/etc
 wget http://beta.quicklisp.org/quicklisp.lisp
 
