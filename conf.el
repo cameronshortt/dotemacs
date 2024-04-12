@@ -16,25 +16,25 @@
   (load-file "~/.emacs"))
 
 (defun open-conf ()
-  (interactive)
-  (find-file "~/.emacs"))
+   (interactive)
+   (find-file "~/.emacs"))
 
-(defun path-cons (dir)
+ (defun path-cons (dir)
    (interactive "sDirectory to add? ")
-   (setenv "PATH" (concat dir (getenv "PATH")))
+   (setenv "PATH" (concat dir ":" (getenv "PATH")))
    (setq exec-path (cons dir exec-path)))
 
-(use-package emacs
- :bind (("C-=" . text-scale-increase)
-        ("C--" . text-scale-decrease)
-        ("C-c r" . reload)
-        ("C-c c" . open-conf)
-	("C-c i" . ibuffer)
-	("C-c s" . eshell)
-	("C-c w w" . delete-window)
-	("C-c w o" . delete-other-windows)
-	("C-c w s" . split-window-right)
-	("C-c w v" . split-window-below))
+ (use-package emacs
+   :bind (("C-=" . text-scale-increase)
+          ("C--" . text-scale-decrease)
+          ("C-c r" . reload)
+          ("C-c c" . open-conf)
+	  ("C-c i" . ibuffer)
+	  ("C-c s" . eshell)
+	  ("C-c w w" . delete-window)
+	  ("C-c w o" . delete-other-windows)
+	  ("C-c w s" . split-window-right)
+	  ("C-c w v" . split-window-below))
  :hook ((emacs-startup . (lambda () (message "(%s %d)"
 					     (format "%.2f"
 						     (float-time
@@ -55,7 +55,7 @@
    (path-cons "/opt/local/bin"))
  (path-cons "/usr/local/bin")
  (path-cons (concat (getenv "HOME") "/bin"))
-	  
+ 
  (menu-bar-mode -1)
  (tool-bar-mode -1)
  (scroll-bar-mode -1)
@@ -67,14 +67,16 @@
  (load-theme 'modus-vivendi)
 
  (load "~/etc/fun.el")
- (server-start))
+ (server-start)
 
-(use-package org
-  :hook ((org-mode . org-indent-mode))
-  :config (setq org-edit-src-content-indentation 0))
-(use-package toc-org
-  :commands toc-org-enable
-  :hook (org-mode . toc-org-enable))
+ (setq-default tab-width 4)
+
+ (use-package org
+   :hook ((org-mode . org-indent-mode))
+   :config (setq org-edit-src-content-indentation 0))
+ (use-package toc-org
+   :commands toc-org-enable
+   :hook (org-mode . toc-org-enable)))
 (autoload 'org-tempo "org-tempo" t nil)
 (use-package org-drill)
 
@@ -95,7 +97,8 @@
 (use-package esup :config (setq esup-depth 0))
 
 (use-package god-mode
-  :bind ("<tab> <tab>" . god-mode)
+  :bind ("§" . god-mode)
+        ("C-§" . god-mode)  
   :hook ((emacs-startup . god-mode-all))
   :config (setq god-exempt-major-modes nil
 	        god-exempt-predicates nil ))
@@ -105,13 +108,24 @@
 
 (use-package teco
   :bind ("<home>" . teco))
+
+(use-package tuareg)
+(use-package merlin
+  :hook ((tuareg-mode . merlin-mode)))
+
+(use-package proof-general)
+
+(use-package gnugo)
+
+(use-package bison-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(slime teco sly toc-org paredit org-drill magit god-mode esup eat)))
+   '(gnugo forecast metar noaa proof-general tuareg toc-org teco slime paredit org-drill merlin magit god-mode geiser-guile esup eat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
